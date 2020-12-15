@@ -8,6 +8,9 @@ describe('recipe-lab routes', () => {
   beforeEach(() => {
     return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
   });
+  afterAll(() => {
+    return pool.end();
+  });
 
   it('creates a recipe', () => {
     return request(app)
@@ -60,9 +63,11 @@ describe('recipe-lab routes', () => {
 
     return request(app)
       .get('/api/v1/recipes/2')
-      .then(expect(res.body).toContainEqual(recipes[1]);
-
-  })
+      .then(
+        res => {
+          expect(res.body).toEqual(recipes[1]);
+        });
+  });
 
   it('updates a recipe by id', async () => {
     const recipe = await Recipe.insert({
