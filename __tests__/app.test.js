@@ -35,7 +35,7 @@ describe('recipe-lab routes', () => {
       });
   });
 
-  it('gets all recipes', async() => {
+  it('gets all recipes', async () => {
     const recipes = await Promise.all([
       { name: 'cookies', directions: [] },
       { name: 'cake', directions: [] },
@@ -51,7 +51,20 @@ describe('recipe-lab routes', () => {
       });
   });
 
-  it('updates a recipe by id', async() => {
+  it('gets a recipe by id', async () => {
+    const recipes = await Promise.all([
+      { name: 'cookies', directions: [] },
+      { name: 'cake', directions: [] },
+      { name: 'pie', directions: [] }
+    ].map(recipe => Recipe.insert(recipe)));
+
+    return request(app)
+      .get('/api/v1/recipes/2')
+      .then(expect(res.body).toContainEqual(recipes[1]);
+
+  })
+
+  it('updates a recipe by id', async () => {
     const recipe = await Recipe.insert({
       name: 'cookies',
       directions: [
