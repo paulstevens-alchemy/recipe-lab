@@ -104,4 +104,26 @@ describe('recipe-lab routes', () => {
         });
       });
   });
+  it('deletes a recipe by id', async () => {
+    const recipes = await Promise.all([
+      { name: 'cookies', directions: [] },
+      { name: 'cake', directions: [] },
+      { name: 'pie', directions: [] }
+    ].map(recipe => Recipe.insert(recipe)));
+
+    const res1 = await request(app)
+      .delete('/api/v1/recipes/1');
+
+    const res2 = await request(app)
+      .delete('/api/v1/recipes/2');
+
+    const res3 = await request(app)
+      .delete('/api/v1/recipes/3');
+
+
+    expect(res1.body).toEqual(recipes[0]);
+    expect(res2.body).toEqual(recipes[1]);
+    expect(res3.body).toEqual(recipes[2]);
+
+  });
 });
