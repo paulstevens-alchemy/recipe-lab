@@ -11,6 +11,14 @@ const testLog = {
     rating: 5
 }
 
+const testLog2 = {
+    id: '2',
+    recipeId: 1,
+    dateOfEvent: 'This Friday',
+    notes: 'notes notes notes',
+    rating: 3
+}
+
 
 describe('log routes', () => {
     beforeAll(() => {
@@ -26,6 +34,31 @@ describe('log routes', () => {
 
         expect(body).toEqual(testLog)
     });
+
+    it('creates a log', async () => {
+        const { body } = await request(app)
+            .post('/api/v1/logs')
+            .send(testLog2)
+
+        console.log(body)
+
+        expect(body).toEqual(testLog2)
+    });
+
+    it('creates a log', async () => {
+        const { body } = await request(app)
+            .post('/api/v1/logs')
+            .send(testLog)
+
+        expect(body).toEqual(testLog)
+    });
+
+    it('finds all logs', async () => {
+        const { body } = await request(app)
+            .get('/api/v1/logs');
+
+        expect(body).toEqual([testLog1, testLog2])
+    })
 
 
 
