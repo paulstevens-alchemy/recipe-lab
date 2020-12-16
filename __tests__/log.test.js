@@ -54,6 +54,9 @@ describe('log routes', () => {
     beforeAll(() => {
         return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'))
     })
+    afterAll(() => {
+        return pool.end();
+    });
 
     it('creates a log', async () => {
 
