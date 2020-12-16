@@ -5,7 +5,7 @@ const app = require('../lib/app');
 
 const testLog = {
     id: '1',
-    recipeId: 1,
+    recipeId: '1',
     dateOfEvent: 'Last Thursday',
     notes: 'notes notes notes',
     rating: 5
@@ -13,7 +13,7 @@ const testLog = {
 
 const testLog2 = {
     id: '2',
-    recipeId: 1,
+    recipeId: '1',
     dateOfEvent: 'This Friday',
     notes: 'notes notes notes',
     rating: 3
@@ -21,19 +21,35 @@ const testLog2 = {
 
 const updatedTestLog = {
     id: '1',
-    recipeId: 1,
+    recipeId: '1',
     dateOfEvent: 'Last Thursday',
     notes: 'notes notes notes',
     rating: 3
 }
 
+const testRecipe = {
+    name: 'cookies',
+    directions: [
+        'preheat oven to 375',
+        'mix ingredients',
+        'put dough on cookie sheet',
+        'bake for 10 minutes'
+    ]
+}
+
 
 describe('log routes', () => {
     beforeAll(() => {
-        return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
-    });
+        return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'))
+    })
 
     it('creates a log', async () => {
+
+        await request(app)
+            .post('/api/v1/recipes')
+            .send(testRecipe);
+
+
         const response1 = await request(app)
             .post('/api/v1/logs')
             .send(testLog)
@@ -47,10 +63,6 @@ describe('log routes', () => {
 
     });
 
-    it('creates a log', async () => {
-
-
-    });
 
     it('finds all logs', async () => {
         const { body } = await request(app)
@@ -63,7 +75,7 @@ describe('log routes', () => {
         const { body } = await request(app)
             .get('/api/v1/logs/1');
 
-        expect(body).toEqual(testLog);
+        expect(body).toEqual({ ...testLog, ...testRecipe });
     })
 
     it('updates a log', async () => {
