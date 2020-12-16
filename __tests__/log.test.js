@@ -65,9 +65,16 @@ describe('log routes', () => {
 
     it('updates a log', async () => {
         const { body } = await request(app)
-            .put('/api/v1/logs/2')
+            .put('/api/v1/logs/1')
             .send(updatedTestLog);
 
         expect(body).toEqual(updatedTestLog);
+    })
+
+    it('deletes a log', async () => {
+        const { body } = await request(app)
+            .delete('/api/v1/logs/1')
+
+        expect(body).toEqual(updatedTestLog)
     })
 })
