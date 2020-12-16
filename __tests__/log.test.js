@@ -34,19 +34,22 @@ describe('log routes', () => {
     });
 
     it('creates a log', async () => {
-        const { body } = await request(app)
+        const response1 = await request(app)
             .post('/api/v1/logs')
             .send(testLog)
 
-        expect(body).toEqual(testLog)
-    });
-
-    it('creates a log', async () => {
-        const { body } = await request(app)
+        const response2 = await request(app)
             .post('/api/v1/logs')
             .send(testLog2)
 
-        expect(body).toEqual(testLog2)
+        expect(response1.body).toEqual(testLog)
+        expect(response2.body).toEqual(testLog2)
+
+    });
+
+    it('creates a log', async () => {
+
+
     });
 
     it('finds all logs', async () => {
