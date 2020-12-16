@@ -48,6 +48,12 @@ describe('log routes', () => {
         expect(body).toEqual([testLog, testLog2])
     })
 
+    it('finds a log by id', async () => {
+        const { body } = await request(app)
+            .get('/api/v1/logs/1');
+
+        expect(body).toEqual(testLog);
+    })
 
 
 })
