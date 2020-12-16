@@ -75,6 +75,6 @@ describe('log routes', () => {
         const { body } = await request(app)
             .delete('/api/v1/logs/1')
 
-        expect(body).toEqual(updatedTestLog)
+        expect(body).toEqual(updatedTestLog);
     })
 })
