@@ -19,6 +19,14 @@ const testLog2 = {
     rating: 3
 }
 
+const updatedTestLog = {
+    id: '1',
+    recipeId: 1,
+    dateOfEvent: 'Last Thursday',
+    notes: 'notes notes notes',
+    rating: 3
+}
+
 
 describe('log routes', () => {
     beforeAll(() => {
@@ -55,5 +63,11 @@ describe('log routes', () => {
         expect(body).toEqual(testLog);
     })
 
+    it('updates a log', async () => {
+        const { body } = await request(app)
+            .put('/api/v1/logs/2')
+            .send(updatedTestLog);
 
+        expect(body).toEqual(updatedTestLog);
+    })
 })
