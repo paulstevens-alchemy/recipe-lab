@@ -4,6 +4,28 @@ const request = require('supertest');
 const app = require('../lib/app');
 const Recipe = require('../lib/models/recipe');
 
+const testRecipe = {
+  name: 'cookies',
+  directions: [
+    'preheat oven to 375',
+    'mix ingredients',
+    'put dough on cookie sheet',
+    'bake for 10 minutes'
+  ],
+  ingredients: [
+    {
+      amount: '1',
+      measurement: 'gram',
+      name: 'baking powder'
+    },
+    {
+      amount: '5',
+      measurement: 'ounces',
+      name: 'butter'
+    }
+  ]
+};
+
 describe('recipe-lab routes', () => {
   beforeEach(() => {
     return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
@@ -15,34 +37,19 @@ describe('recipe-lab routes', () => {
   it('creates a recipe', () => {
     return request(app)
       .post('/api/v1/recipes')
-      .send({
-        name: 'cookies',
-        directions: [
-          'preheat oven to 375',
-          'mix ingredients',
-          'put dough on cookie sheet',
-          'bake for 10 minutes'
-        ]
-      })
+      .send(testRecipe)
       .then(res => {
         expect(res.body).toEqual({
-          id: expect.any(String),
-          name: 'cookies',
-          directions: [
-            'preheat oven to 375',
-            'mix ingredients',
-            'put dough on cookie sheet',
-            'bake for 10 minutes'
-          ]
+          id: expect.any(String), ...testRecipe
         });
       });
   });
 
   it('gets all recipes', async () => {
     const recipes = await Promise.all([
-      { name: 'cookies', directions: [] },
-      { name: 'cake', directions: [] },
-      { name: 'pie', directions: [] }
+      { name: 'cookies', directions: [], ingredients: [] },
+      { name: 'cake', directions: [], ingredients: [] },
+      { name: 'pie', directions: [], ingredients: [] }
     ].map(recipe => Recipe.insert(recipe)));
 
     return request(app)
@@ -56,9 +63,9 @@ describe('recipe-lab routes', () => {
 
   it('gets a recipe by id', async () => {
     const recipes = await Promise.all([
-      { name: 'cookies', directions: [] },
-      { name: 'cake', directions: [] },
-      { name: 'pie', directions: [] }
+      { name: 'cookies', directions: [], ingredients: [] },
+      { name: 'cake', directions: [], ingredients: [] },
+      { name: 'pie', directions: [], ingredients: [] }
     ].map(recipe => Recipe.insert(recipe)));
 
     return request(app)
@@ -70,45 +77,22 @@ describe('recipe-lab routes', () => {
   });
 
   it('updates a recipe by id', async () => {
-    const recipe = await Recipe.insert({
-      name: 'cookies',
-      directions: [
-        'preheat oven to 375',
-        'mix ingredients',
-        'put dough on cookie sheet',
-        'bake for 10 minutes'
-      ],
-    });
+    const recipe = await Recipe.insert(testRecipe);
 
     return request(app)
       .put(`/api/v1/recipes/${recipe.id}`)
-      .send({
-        name: 'good cookies',
-        directions: [
-          'preheat oven to 375',
-          'mix ingredients',
-          'put dough on cookie sheet',
-          'bake for 10 minutes'
-        ]
-      })
+      .send(testRecipe)
       .then(res => {
         expect(res.body).toEqual({
-          id: expect.any(String),
-          name: 'good cookies',
-          directions: [
-            'preheat oven to 375',
-            'mix ingredients',
-            'put dough on cookie sheet',
-            'bake for 10 minutes'
-          ]
+          id: expect.any(String), ...testRecipe
         });
       });
   });
   it('deletes a recipe by id', async () => {
     const recipes = await Promise.all([
-      { name: 'cookies', directions: [] },
-      { name: 'cake', directions: [] },
-      { name: 'pie', directions: [] }
+      { name: 'cookies', directions: [], ingredients: [] },
+      { name: 'cake', directions: [], ingredients: [] },
+      { name: 'pie', directions: [], ingredients: [] }
     ].map(recipe => Recipe.insert(recipe)));
 
     const res1 = await request(app)

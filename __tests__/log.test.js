@@ -34,6 +34,18 @@ const testRecipe = {
         'mix ingredients',
         'put dough on cookie sheet',
         'bake for 10 minutes'
+    ],
+    ingredients: [
+        {
+            amount: '1',
+            measurement: 'gram',
+            name: 'baking powder'
+        },
+        {
+            amount: '5',
+            measurement: 'ounces',
+            name: 'butter'
+        }
     ]
 }
 
