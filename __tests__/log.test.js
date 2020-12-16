@@ -30,8 +30,6 @@ describe('log routes', () => {
             .post('/api/v1/logs')
             .send(testLog)
 
-        console.log(body)
-
         expect(body).toEqual(testLog)
     });
 
@@ -40,24 +38,14 @@ describe('log routes', () => {
             .post('/api/v1/logs')
             .send(testLog2)
 
-        console.log(body)
-
         expect(body).toEqual(testLog2)
-    });
-
-    it('creates a log', async () => {
-        const { body } = await request(app)
-            .post('/api/v1/logs')
-            .send(testLog)
-
-        expect(body).toEqual(testLog)
     });
 
     it('finds all logs', async () => {
         const { body } = await request(app)
             .get('/api/v1/logs');
 
-        expect(body).toEqual([testLog1, testLog2])
+        expect(body).toEqual([testLog, testLog2])
     })
 
 
