@@ -116,6 +116,20 @@ describe('recipe-lab routes', () => {
   })
 
 
+  it('finds a log by id', async () => {
+    await request(app)
+      .post('/api/v1/recipes')
+      .send(testRecipe);
+
+    await request(app)
+      .post('/api/v1/logs')
+      .send(testLog)
+
+    const { body } = await request(app)
+      .get('/api/v1/logs/1');
+
+    expect(body).toEqual({ ...testLog, ...testRecipe });
+  })
 
 
 
