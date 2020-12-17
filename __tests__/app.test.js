@@ -3,28 +3,9 @@ const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
 const Recipe = require('../lib/models/recipe');
+const { testLog, testLog2, updatedTestLog, testRecipe, updatedTestRecipe, arrayOfRecipes } = require('../json.js');
 
-const testRecipe = {
-  name: 'cookies',
-  directions: [
-    'preheat oven to 375',
-    'mix ingredients',
-    'put dough on cookie sheet',
-    'bake for 10 minutes'
-  ],
-  ingredients: [
-    {
-      amount: '1',
-      measurement: 'gram',
-      name: 'baking powder'
-    },
-    {
-      amount: '5',
-      measurement: 'ounces',
-      name: 'butter'
-    }
-  ]
-};
+
 
 describe('recipe-lab routes', () => {
   beforeEach(() => {
@@ -46,11 +27,7 @@ describe('recipe-lab routes', () => {
   });
 
   it('gets all recipes', async () => {
-    const recipes = await Promise.all([
-      { name: 'cookies', directions: [], ingredients: [] },
-      { name: 'cake', directions: [], ingredients: [] },
-      { name: 'pie', directions: [], ingredients: [] }
-    ].map(recipe => Recipe.insert(recipe)));
+    const recipes = await Promise.all(arrayOfRecipes.map(recipe => Recipe.insert(recipe)));
 
     return request(app)
       .get('/api/v1/recipes')
@@ -62,11 +39,7 @@ describe('recipe-lab routes', () => {
   });
 
   it('gets a recipe by id', async () => {
-    const recipes = await Promise.all([
-      { name: 'cookies', directions: [], ingredients: [] },
-      { name: 'cake', directions: [], ingredients: [] },
-      { name: 'pie', directions: [], ingredients: [] }
-    ].map(recipe => Recipe.insert(recipe)));
+    const recipes = await Promise.all(arrayOfRecipes.map(recipe => Recipe.insert(recipe)));
 
     return request(app)
       .get('/api/v1/recipes/2')
@@ -89,11 +62,7 @@ describe('recipe-lab routes', () => {
       });
   });
   it('deletes a recipe by id', async () => {
-    const recipes = await Promise.all([
-      { name: 'cookies', directions: [], ingredients: [] },
-      { name: 'cake', directions: [], ingredients: [] },
-      { name: 'pie', directions: [], ingredients: [] }
-    ].map(recipe => Recipe.insert(recipe)));
+    const recipes = await Promise.all(arrayOfRecipes.map(recipe => Recipe.insert(recipe)));
 
     const res1 = await request(app)
       .delete('/api/v1/recipes/1');
