@@ -121,12 +121,12 @@ describe('recipe-lab routes', () => {
       .post('/api/v1/recipes')
       .send(testRecipe);
 
-    await request(app)
+    const postedLog = await request(app)
       .post('/api/v1/logs')
       .send(testLog)
 
     const { body } = await request(app)
-      .get('/api/v1/logs/1');
+      .get(`/api/v1/logs/${postedLog.body.id}`);
 
     expect(body).toEqual({ ...testLog, ...testRecipe });
   })
