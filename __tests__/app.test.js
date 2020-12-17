@@ -131,7 +131,37 @@ describe('recipe-lab routes', () => {
     expect(body).toEqual({ ...testLog, ...testRecipe });
   })
 
+  it('updates a log', async () => {
+
+    await request(app)
+      .post('/api/v1/recipes')
+      .send(testRecipe);
+
+    const postedLog = await request(app)
+      .post('/api/v1/logs')
+      .send(testLog)
+
+    const { body } = await request(app)
+      .put(`/api/v1/logs/${postedLog.body.id}`)
+      .send(updatedTestLog);
+
+    expect(body).toEqual(updatedTestLog);
+  })
 
 
+  it('deletes a log', async () => {
 
+    await request(app)
+      .post('/api/v1/recipes')
+      .send(testRecipe);
+
+    const postedLog = await request(app)
+      .post('/api/v1/logs')
+      .send(updatedTestLog)
+
+    const { body } = await request(app)
+      .delete(`/api/v1/logs/${postedLog.body.id}`)
+
+    expect(body).toEqual(updatedTestLog);
+  })
 });
