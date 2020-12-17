@@ -74,4 +74,50 @@ describe('recipe-lab routes', () => {
         })
       })
   })
+
+  it('creates a log', async () => {
+
+    await request(app)
+      .post('/api/v1/recipes')
+      .send(testRecipe);
+
+
+    const response1 = await request(app)
+      .post('/api/v1/logs')
+      .send(testLog)
+
+    const response2 = await request(app)
+      .post('/api/v1/logs')
+      .send(testLog2)
+
+    expect(response1.body).toEqual(testLog)
+    expect(response2.body).toEqual(testLog2)
+
+  });
+
+
+  it('finds all logs', async () => {
+    await request(app)
+      .post('/api/v1/recipes')
+      .send(testRecipe);
+
+    await request(app)
+      .post('/api/v1/logs')
+      .send(testLog)
+
+    await request(app)
+      .post('/api/v1/logs')
+      .send(testLog2)
+
+    const { body } = await request(app)
+      .get('/api/v1/logs');
+
+    expect(body).toEqual([testLog, testLog2])
+  })
+
+
+
+
+
+
 });
