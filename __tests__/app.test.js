@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const Recipe = require('../lib/models/recipe');
 const { testLog, testLog2, updatedTestLog, testRecipe, updatedTestRecipe, arrayOfRecipes } = require('../json.js');
+const { O_TRUNC } = require('constants');
 
 
 
@@ -61,22 +62,16 @@ describe('recipe-lab routes', () => {
         });
       });
   });
-  it('deletes a recipe by id', async () => {
-    const recipes = await Promise.all(arrayOfRecipes.map(recipe => Recipe.insert(recipe)));
 
-    const res1 = await request(app)
-      .delete('/api/v1/recipes/1');
+  it('deletes a recipe', async () => {
+    const recipe = await Recipe.insert(testRecipe);
 
-    const res2 = await request(app)
-      .delete('/api/v1/recipes/2');
-
-    const res3 = await request(app)
-      .delete('/api/v1/recipes/3');
-
-
-    expect(res1.body).toEqual(recipes[0]);
-    expect(res2.body).toEqual(recipes[1]);
-    expect(res3.body).toEqual(recipes[2]);
-
-  });
+    return request(app)
+      .delete(`/api/v1/recipes/${recipe.id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          id: expect.any(String), ...testRecipe
+        })
+      })
+  })
 });
